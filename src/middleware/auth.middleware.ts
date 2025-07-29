@@ -21,7 +21,7 @@ export const protect = async (req: Request, res: Response, next: NextFunction) =
       return res.status(statusCodes.UNAUTHORIZED).json({ message: "User not found" });
     }
 
-    (req as any).user = user;
+    (req as any).user = { id: decoded.id };;
     next();
   } catch (err) {
     res.status(statusCodes.UNAUTHORIZED).json({ message: "Invalid token" });
