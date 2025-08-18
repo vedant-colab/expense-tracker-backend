@@ -1,6 +1,7 @@
 import type { Request, Response, NextFunction } from 'express';
 import { statusCodes } from '../config/config';
 import { Expense } from '../models/Expense';
+import { client } from '../utils/redis';
 
 
 export const createExpense = async (req: Request, res: Response, _next: NextFunction) => {
@@ -105,6 +106,7 @@ export const getAllExpenses = async (req: Request, res: Response, _next: NextFun
         message: "No expense found or unauthorized"
       })
     }
+    client.set(`user:${userID}`, JSON.stringify(result))
     res.status(200).json({
       success: true,
       message: "Expenses fetched successfully",
@@ -132,6 +134,7 @@ export const getExpense = async (req: Request, res: Response, _next: NextFunctio
         message: "No expense found or unauthorized"
       })
     }
+    client.set(`item:${expenseId}`, JSON.stringify(result))
     res.status(200).json({
       success: true,
       message: "Expense fetched successfully",
